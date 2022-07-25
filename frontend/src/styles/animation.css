@@ -1,0 +1,29 @@
+@keyframes FadeLeftAnimation {
+	from {
+		opacity: 0;
+		transform: translateX(-25%);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0%);
+	}
+}
+@keyframes FadeRightAnimation {
+	from {
+		opacity: 0;
+		transform: translateX(25%);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0%);
+	}
+}
+
+.fadeLeft {
+	animation-name: FadeLeftAnimation;
+	animation-timing-function: ease-out;
+}
+.fadeRight {
+	animation-name: FadeRightAnimation;
+	animation-timing-function: ease-out;
+}

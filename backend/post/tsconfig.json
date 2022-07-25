@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"rootDir": "./src",
+		"typeRoots": ["./types"],
+		"target": "es2016",
+		"module": "commonjs",
+		"useUnknownInCatchVariables": false,
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"sourceMap": true
+	}
+}

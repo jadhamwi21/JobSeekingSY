@@ -1,0 +1,5 @@
+db:
+  redis:
+    host: activation-service-redis-svc
+    port: 6379
+    namespace: EG

@@ -1,0 +1,17 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"user_service": "npm run dev --prefix user",
+		"gateway": "npm start --prefix gateway",
+		"profile_service": "npm run dev --prefix profile",
+		"activation_service": "npm run dev --prefix activation",
+		"post_service": "npm run dev --prefix post",
+		"dev": "concurrently \"npm run user_service\" \"npm run gateway\" \"npm run profile_service\" \"npm run activation_service\" \"npm run post_service\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}

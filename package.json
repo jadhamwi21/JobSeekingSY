@@ -1,0 +1,25 @@
+{
+	"name": "jobseekingsy",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"frontend": "npm start --prefix frontend",
+		"backend": "npm run dev --prefix backend",
+		"dev": "concurrently \"npm run frontend\" \"npm run backend\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jadhamwi21/JobSeekingSy.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/jadhamwi21/JobSeekingSy/issues"
+	},
+	"homepage": "https://github.com/jadhamwi21/JobSeekingSy#readme",
+	"devDependencies": {
+		"concurrently": "^7.2.1"
+	}
+}

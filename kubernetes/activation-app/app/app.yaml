@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activation-service-app-dep
+  labels:
+    app: activation-service-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: activation-service-app
+  template:
+    metadata:
+      labels:
+        app: activation-service-app
+    spec:
+      containers:
+        - name: activation-service-app-container
+          image: jadhamwi21/jobseekingsy:v1-activation-app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8003
+          env:
+            - name: database_url
+              valueFrom:
+                configMapKeyRef:
+                  name: activation-service-app-configmap
+                  key: activation-service-database-url
+            - name: redis_url
+              valueFrom:
+                configMapKeyRef:
+                  name: activation-service-app-configmap
+                  key: activation-service-redis-url
+            - name: rabbitmq_url
+              valueFrom:
+                configMapKeyRef:
+                  name: activation-service-app-configmap
+                  key: services-broker-url
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: jwt-private-key
+            - name: EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: post-service-app-secret
+                  key: nodemailer-email
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: post-service-app-secret
+                  key: nodemailer-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: activation-service-app-svc
+spec:
+  selector:
+    app: activation-service-app
+  ports:
+    - protocol: TCP
+      port: 8003
+      targetPort: 8003

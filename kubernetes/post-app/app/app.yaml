@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-service-app-dep
+  labels:
+    app: post-service-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: post-service-app
+  template:
+    metadata:
+      labels:
+        app: post-service-app
+    spec:
+      containers:
+        - name: post-service-app-container
+          image: jadhamwi21/jobseekingsy:v1-post-app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8004
+          env:
+            - name: database_endpoint
+              valueFrom:
+                configMapKeyRef:
+                  name: post-service-app-configmap
+                  key: post-service-database-url
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: jwt-private-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-service-app-svc
+spec:
+  selector:
+    app: post-service-app
+  ports:
+    - protocol: TCP
+      port: 8004
+      targetPort: 8004

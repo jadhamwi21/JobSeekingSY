@@ -1,0 +1,31 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "Montserrat", sans-serif;
+}
+
+:root {
+	--blue: #4b51ff;
+	--gray: #f2f2f2;
+	--dark-gray: #8a908f;
+	--black: black;
+}
+
+img {
+	-webkit-user-drag: none;
+	user-select: none;
+}
+
+*::-webkit-scrollbar {
+	width: 0px;
+}
+*::-webkit-scrollbar-track {
+	background-color: var(--gray);
+}
+*::-webkit-scrollbar-thumb {
+	background-color: var(--blue);
+	border-radius: 6px;
+}
+*::-webkit-scrollbar-thumb:hover {
+	width: 10px;
+}

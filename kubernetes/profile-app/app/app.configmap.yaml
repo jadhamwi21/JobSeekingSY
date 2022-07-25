@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: profile-service-app-configmap
+data:
+  profile-service-database-url: mongodb://profile-service-database-svc:27017/database
+  services-broker-url: rabbitmq-svc
+  jwt-private-key: 3c40b10199653cab8b41c91c34fb027964d2d5628bc2e614174649cc348a4a91fabe92e13f2b86cfbd11030a1c89a969950f48a9a4f3f08265a7cc4ca6db7710

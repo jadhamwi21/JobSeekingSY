@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: activation-service-app-configmap
+data:
+  activation-service-database-url: mongodb://activation-service-database-svc:27017/database
+  activation-service-redis-url: redis://activation-service-redis-svc:6379
+  services-broker-url: rabbitmq-svc

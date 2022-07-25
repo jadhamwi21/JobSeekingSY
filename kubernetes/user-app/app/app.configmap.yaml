@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-app-configmap
+data:
+  user-service-database-url: mongodb://user-service-database-svc:27017/database
+  activation-service-url: http://activation-service-app-svc:8003
+  profile-service-url: http://profile-service-app-svc:8002
+  services-broker-url: rabbitmq-svc

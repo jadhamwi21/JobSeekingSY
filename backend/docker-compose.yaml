@@ -1,0 +1,92 @@
+version: 2.6.0
+services:
+  api_gateway:
+    image: express-gateway
+    container_name: api_gateway_c
+    volumes:
+      - ./gateway/config:/var/lib/eg
+    ports:
+      - 8000:8000
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=debug
+    depends_on:
+      - services_broker
+      - user_service
+      - activation_service
+      - post_service
+      - profile_service
+  services_broker:
+    image: rabbitmq:management-alpine
+    restart: unless-stopped
+    container_name: services_broker_c
+  user_service:
+    container_name: user_service_c
+    build: ./user
+    restart: unless-stopped
+    environment:
+      - PRIVATE_KEY=3c40b10199653cab8b41c91c34fb027964d2d5628bc2e614174649cc348a4a91fabe92e13f2b86cfbd11030a1c89a969950f48a9a4f3f08265a7cc4ca6db7710
+    depends_on:
+      - user_database
+      - services_broker
+  user_database:
+    image: mongo:4.2.21-bionic
+    container_name: user_database_c
+    restart: unless-stopped
+    volumes:
+      - /jobseekingsy/userdatabase:/data/db
+  profile_service:
+    container_name: profile_service_c
+    build: ./profile
+    restart: unless-stopped
+    environment:
+      - PRIVATE_KEY=3c40b10199653cab8b41c91c34fb027964d2d5628bc2e614174649cc348a4a91fabe92e13f2b86cfbd11030a1c89a969950f48a9a4f3f08265a7cc4ca6db7710
+    depends_on:
+      - profile_database
+      - services_broker
+  profile_database:
+    image: mongo:4.2.21-bionic
+    container_name: profile_database_c
+    restart: unless-stopped
+    volumes:
+      - /jobseekingsy/profiledatabase:/data/db
+  post_service:
+    container_name: post_service_c
+    build: ./post
+    restart: unless-stopped
+    environment:
+      - PRIVATE_KEY=3c40b10199653cab8b41c91c34fb027964d2d5628bc2e614174649cc348a4a91fabe92e13f2b86cfbd11030a1c89a969950f48a9a4f3f08265a7cc4ca6db7710
+    depends_on:
+      - post_database
+  post_database:
+    image: mongo:4.2.21-bionic
+    container_name: post_database_c
+    restart: unless-stopped
+    volumes:
+      - /jobseekingsy/postdatabase:/data/db
+  activation_service:
+    container_name: activation_service_c
+    build: ./activation
+    restart: unless-stopped
+    environment:
+      - PRIVATE_KEY=3c40b10199653cab8b41c91c34fb027964d2d5628bc2e614174649cc348a4a91fabe92e13f2b86cfbd11030a1c89a969950f48a9a4f3f08265a7cc4ca6db7710
+      - EMAIL=jobseekingsy@outlook.com
+      - PASSWORD=House3125474@
+    depends_on:
+      - activation_database
+      - activation_redis
+      - services_broker
+  activation_database:
+    image: mongo:4.2.21-bionic
+    container_name: activation_database_c
+    restart: unless-stopped
+    volumes:
+      - /jobseekingsy/activationdatabase:/data/db
+  activation_redis:
+    image: redis:7-alpine
+    container_name: activation_redis_c
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - ./activation/redis.conf:/usr/local/etc/redis/redis.conf

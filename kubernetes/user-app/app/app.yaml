@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-app-dep
+  labels:
+    app: user-service-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-service-app
+  template:
+    metadata:
+      labels:
+        app: user-service-app
+    spec:
+      containers:
+        - name: user-service-app-container
+          image: jadhamwi21/jobseekingsy:v1-user-app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8001
+          env:
+            - name: database_url
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-app-configmap
+                  key: user-service-database-url
+            - name: rabbitmq_url
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-app-configmap
+                  key: services-broker-url
+            - name: activation_service_url
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-app-configmap
+                  key: activation-service-url
+            - name: profile_service_url
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-app-configmap
+                  key: profile-service-url
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: jwt-private-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-app-svc
+spec:
+  selector:
+    app: user-service-app
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001

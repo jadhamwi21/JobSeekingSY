@@ -1,0 +1,79 @@
+http:
+  port: 8000
+  hostname: 0.0.0.0
+apiEndpoints:
+  user:
+    host: "*"
+    paths:
+      - "/user/login"
+      - "/user/logout"
+      - "/user/signup"
+      - "/user/refresh"
+  profile:
+    host: "*"
+    paths:
+      - "/profile/*/details"
+      - "/profile/details"
+      - "/profile/setup"
+      - "/profile/setup/seeker"
+      - "/profile/setup/recruiter"
+      - "/profile/images/*"
+      - "/profile/resumes/*"
+      - "/profile/updation/seeker"
+      - "/profile/updation/recruiter"
+      - "/profile/details/*"
+      - "/profile/seeker/search/*"
+  activation:
+    host: "*"
+    paths:
+      - "/activation/code/delivery"
+      - "/activation/code/submission"
+      - "/activation"
+  post:
+    host: "*"
+    paths:
+      - "/posts?*"
+      - "/post/*"
+      - "/posts/*"
+      - "/post"
+serviceEndpoints:
+  userservice:
+    url: "http://user-service-app-svc:8001"
+  profileservice:
+    url: "http://profile-service-app-svc:8002"
+  activationservice:
+    url: "http://activation-service-app-svc:8003"
+  postservice:
+    url: "http://post-service-app-svc:8004"
+policies:
+  - cors
+  - proxy
+pipelines:
+  user:
+    apiEndpoints:
+      - user
+    policies:
+      - proxy:
+          action:
+            serviceEndpoint: userservice
+  profile:
+    apiEndpoints:
+      - profile
+    policies:
+      - proxy:
+          action:
+            serviceEndpoint: profileservice
+  activation:
+    apiEndpoints:
+      - activation
+    policies:
+      - proxy:
+          action:
+            serviceEndpoint: activationservice
+  post:
+    apiEndpoints:
+      - post
+    policies:
+      - proxy:
+          action:
+            serviceEndpoint: postservice

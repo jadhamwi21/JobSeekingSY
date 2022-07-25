@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: profile-service-app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-service-app-dep
+  labels:
+    app: profile-service-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: profile-service-app
+  template:
+    metadata:
+      labels:
+        app: profile-service-app
+    spec:
+      volumes:
+        - name: profiles-data
+          persistentVolumeClaim:
+            claimName: profile-service-app-pvc
+      containers:
+        - name: profile-service-app-container
+          image: jadhamwi21/jobseekingsy:v1-profile-app
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: profiles-data
+              mountPath: /data
+          ports:
+            - containerPort: 8002
+          env:
+            - name: database_url
+              valueFrom:
+                configMapKeyRef:
+                  name: profile-service-app-configmap
+                  key: profile-service-database-url
+            - name: rabbitmq_url
+              valueFrom:
+                configMapKeyRef:
+                  name: profile-service-app-configmap
+                  key: services-broker-url
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: jwt-private-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: profile-service-app-svc
+spec:
+  selector:
+    app: profile-service-app
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
